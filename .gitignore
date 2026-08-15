@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.pip-packages/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.pem
+credentials.json
+
+# Node / CDK
+infra/node_modules/
+infra/cdk.out/
+infra/.cdk.staging/
+*.js
+*.d.ts
+!infra/jest.config.js
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+*.log
+
+# Local data
+tmp/
+.cache/

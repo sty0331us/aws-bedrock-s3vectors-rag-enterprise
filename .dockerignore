@@ -1,0 +1,13 @@
+.git
+.venv
+.pip-packages
+.pytest_cache
+.mypy_cache
+.ruff_cache
+__pycache__
+infra/node_modules
+infra/cdk.out
+infra/dist
+*.md
+.env
+.env.*
