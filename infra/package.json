@@ -1,0 +1,26 @@
+{
+  "name": "mmrag-infra",
+  "version": "1.0.0",
+  "description": "AWS CDK v2 (TypeScript) for multimodal RAG on Bedrock Knowledge Bases + S3 Vectors",
+  "bin": {
+    "mmrag-infra": "bin/app.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk",
+    "synth": "cdk synth",
+    "diff": "cdk diff",
+    "deploy": "cdk deploy --all --require-approval never"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "aws-cdk": "^2.220.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.220.0",
+    "constructs": "^10.4.2"
+  }
+}
