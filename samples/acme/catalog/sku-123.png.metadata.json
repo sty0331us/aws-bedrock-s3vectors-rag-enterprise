@@ -1,0 +1,8 @@
+{
+  "metadataAttributes": {
+    "tenant_id": { "value": { "type": "STRING", "stringValue": "acme" } },
+    "content_type": { "value": { "type": "STRING", "stringValue": "image" } },
+    "category": { "value": { "type": "STRING", "stringValue": "footwear" } },
+    "created_at": { "value": { "type": "STRING", "stringValue": "2026-09-01T00:00:00Z" } }
+  }
+}

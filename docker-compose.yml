@@ -1,0 +1,30 @@
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_DEFAULT_REGION: ${AWS_REGION:-us-east-1}
+      AWS_PROFILE: ${AWS_PROFILE:-}
+      ENVIRONMENT: dev
+      REDIS_ENDPOINT: redis
+      REDIS_PORT: "6379"
+      REDIS_TLS: "false"
+      KNOWLEDGE_BASE_ID: ${KNOWLEDGE_BASE_ID:-}
+      DATA_SOURCE_ID: ${DATA_SOURCE_ID:-}
+      ENABLE_XRAY: "false"
+    depends_on:
+      redis:
+        condition: service_healthy
