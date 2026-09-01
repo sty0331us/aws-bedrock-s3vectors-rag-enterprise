@@ -2,7 +2,7 @@
 
 Complex / multimodal prompts go to Claude 5 Sonnet (`us.anthropic.claude-sonnet-5`).
 Short factual text prompts go to the fast/cost-efficient Haiku companion
-(`us.anthropic.claude-haiku-4-5`). When `BEDROCK_PROMPT_ROUTER_ARN` is set,
+(`us.anthropic.claude-haiku-5`). When `BEDROCK_PROMPT_ROUTER_ARN` is set,
 Bedrock's managed Anthropic prompt router makes the decision instead of
 these local heuristics.
 """

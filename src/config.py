@@ -38,8 +38,8 @@ class Settings(BaseSettings):
 
     # Claude 5 Sonnet geo inference profile (deep reasoning / synthesis).
     claude_sonnet_model_id: str = "us.anthropic.claude-sonnet-5"
-    # Fast / cost-efficient companion in the Claude 5 stack (Haiku 4.5 on Bedrock).
-    claude_haiku_model_id: str = "us.anthropic.claude-haiku-4-5"
+    # Fast / cost-efficient companion in the Claude 5 stack (Haiku 5 on Bedrock).
+    claude_haiku_model_id: str = "us.anthropic.claude-haiku-5"
 
     # S3 Vectors index dimension. Must match infra/lib/constructs/vector-store.ts.
     embedding_dimension: int = 1024

@@ -45,7 +45,7 @@ Production-ready multimodal Retrieval-Augmented Generation (RAG) for **100M+ mon
 | --- | --- | --- | --- |
 | Embedding | Amazon Nova Multimodal Embeddings | `amazon.nova-2-multimodal-embeddings-v1:0` | Ingestion (index) and L2 cache / retrieve (query). Matryoshka sizes **256 / 384 / 1024 / 3072**. Index default **1024-d**; L2 cache prefix **384-d**. |
 | Deep reasoning / synthesis | **Claude 5 Sonnet** | Geo profile `us.anthropic.claude-sonnet-5` (base `anthropic.claude-sonnet-5`) | Image queries, long prompts, compare / analyze / design. |
-| Rapid / cost-efficient | **Claude 5 Haiku** (fast tier) | Geo profile `us.anthropic.claude-haiku-4-5` (base `anthropic.claude-haiku-4-5`) | Short factual text. Bedrock’s Haiku SKU in the Claude 5 generation stack. |
+| Rapid / cost-efficient | **Claude 5 Haiku** (fast tier) | Geo profile `us.anthropic.claude-haiku-5` (base `anthropic.claude-haiku-5`) | Short factual text. Bedrock’s Haiku SKU in the Claude 5 generation stack. |
 | Optional override | Bedrock intelligent prompt router | `BEDROCK_PROMPT_ROUTER_ARN` | Replaces local heuristics when set. |
 
 Nova does **not** expose a native 512-d Matryoshka cut. Use **384-d** (cheaper cache) or **1024-d** (index / higher recall). Truncation is always from the leading dimensions, then L2-normalized.
@@ -327,7 +327,7 @@ flowchart TB
 | Signal | Model | Bedrock ID |
 | --- | --- | --- |
 | Image query, or text > 1,200 chars, or complexity verbs (`compare`, `analyze`, `architect`, …) | Claude 5 Sonnet | `us.anthropic.claude-sonnet-5` |
-| Short factual text | Claude 5 Haiku (fast tier) | `us.anthropic.claude-haiku-4-5` |
+| Short factual text | Claude 5 Haiku (fast tier) | `us.anthropic.claude-haiku-5` |
 | `BEDROCK_PROMPT_ROUTER_ARN` set | Managed Anthropic router | ARN from Bedrock |
 
 ### Step-by-step data flow (read path)
@@ -362,7 +362,7 @@ flowchart TB
 | L1 / L2 cache | ElastiCache Serverless Redis 7 | Exact hash + semantic cache, TLS, KMS |
 | Retrieve / generate | Bedrock Agent Runtime + Bedrock Runtime | `Retrieve`, `RetrieveAndGenerateStream`, `ConverseStream` |
 | Embeddings | Nova MME `amazon.nova-2-multimodal-embeddings-v1:0` | 1024-d index; 384-d cache prefix |
-| LLM | Claude 5 Sonnet + Haiku (prompt router optional) | `us.anthropic.claude-sonnet-5`, `us.anthropic.claude-haiku-4-5` |
+| LLM | Claude 5 Sonnet + Haiku (prompt router optional) | `us.anthropic.claude-sonnet-5`, `us.anthropic.claude-haiku-5` |
 | Vector store | S3 Vector bucket + cosine `float32` index | Up to 2B vectors / index, ~100 ms warm |
 | Supplemental media | S3 multimodal bucket (KMS, `.bda/` lifecycle) | Extracted images / audio / video |
 | Compute (write) | S3 → EventBridge → SQS FIFO + DLQ → Lambda | Sidecar metadata, debounced `StartIngestionJob` |
@@ -415,7 +415,7 @@ L1 absorbs exact repeats. L2 catches paraphrases via Nova 384-d. If origin QPS s
 
 On-demand Claude 5 and Nova throttle well before 391 origin RPS. Production needs:
 
-- Geo inference profiles (`us.anthropic.claude-sonnet-5`, `us.anthropic.claude-haiku-4-5`) — already the defaults.
+- Geo inference profiles (`us.anthropic.claude-sonnet-5`, `us.anthropic.claude-haiku-5`) — already the defaults.
 - Provisioned Throughput if L2 embed misses stay hot.
 - Circuit breaker + full jitter so 429s do not synchronized-retry the fleet.
 
@@ -564,7 +564,7 @@ Filters are only as strong as ingestion. `/v1/ingest` always writes the sidecar.
 - Bedrock model access in a Region with **both** Knowledge Bases and S3 Vectors (`us-east-1` default):
   - `amazon.nova-2-multimodal-embeddings-v1:0`
   - `us.anthropic.claude-sonnet-5` (Claude 5 Sonnet)
-  - `us.anthropic.claude-haiku-4-5` (Claude 5 Haiku fast tier)
+  - `us.anthropic.claude-haiku-5` (Claude 5 Haiku fast tier)
 - Node.js 20+, CDK v2 (`npm i -g aws-cdk`), Docker, Python 3.12+
 - IAM that can create VPC, ECS, ElastiCache, Bedrock, S3 Vectors, KMS, SQS, Lambda
 - `aws-cdk-lib` ≥ 2.220 (`aws_s3vectors` L1 + Bedrock `S3_VECTORS`)
